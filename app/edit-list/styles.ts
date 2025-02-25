@@ -366,4 +366,76 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  reminderDisplay: {
+    position: 'absolute',
+    left: 16,
+    bottom: 80,
+    backgroundColor: '#E8F3F1',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 3,
+    maxWidth: '80%',
+  },
+  reminderDisplayContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    gap: 8,
+  },
+  reminderDisplayText: {
+    fontSize: 14,
+    color: '#0B4A3F',
+    fontWeight: '500',
+    flex: 1,
+  },
+  reminderDeleteButton: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#F0F0F0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleReminderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E8F3F1',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginTop: 8,
+    alignSelf: 'flex-start',
+    gap: 6,
+  },
+  titleReminderText: {
+    fontSize: 12,
+    color: '#0B4A3F',
+    fontWeight: '500',
+  },
+  titleReminderDeleteButton: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#F0F0F0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleReminderContainerDisabled: {
+    backgroundColor: '#F0F0F0',
+    opacity: 0.8,
+  },
+  titleReminderTextDisabled: {
+    color: '#666666',
+  },
 });
+
+export default function StylesPage() {
+  return null; // This component will never be rendered
+}

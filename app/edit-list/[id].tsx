@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, {
   FadeIn,
   SlideInRight,
@@ -152,11 +152,10 @@ export default function EditListScreen() {
   const [listName, setListName] = useState(list?.name || '');
   const [items, setItems] = useState(list?.items || []);
   const [reminderEnabled, setReminderEnabled] = useState(!!list?.reminder?.enabled);
-  const [reminderDate, setReminderDate] = useState<Date | null>(
-    list?.reminder?.date ? new Date(list?.reminder.date) : null
-  );
+  const [reminderDate, setReminderDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [deletedItems, setDeletedItems] = useState<typeof items>([]);
+  const [showReminderBadge, setShowReminderBadge] = useState(false);
   
   const saveTimeoutRef = useRef<NodeJS.Timeout>();
   const hasUnsavedChanges = useRef(false);
@@ -256,6 +255,71 @@ export default function EditListScreen() {
     };
   }, [listName, items, reminderEnabled, reminderDate, list, id, updateList, setReminder]);
 
+  useEffect(() => {
+    // Load list data
+    // ...
+    
+    // Check if there's a reminder for this list
+    // This is a placeholder - replace with your actual reminder loading logic
+    const loadReminder = async () => {
+      try {
+        // Example: const savedReminder = await AsyncStorage.getItem(`reminder_${id}`);
+        // if (savedReminder) {
+        //   setReminderDate(new Date(savedReminder));
+        // }
+        
+        // For demo purposes:
+        const demoReminder = new Date();
+        demoReminder.setHours(demoReminder.getHours() + 24); // Tomorrow
+        setReminderDate(demoReminder);
+      } catch (error) {
+        console.error('Failed to load reminder:', error);
+      }
+    };
+    
+    loadReminder();
+  }, [id]);
+
+  const formatReminderTime = (date: Date) => {
+    const now = new Date();
+    const isToday = date.getDate() === now.getDate() && 
+                   date.getMonth() === now.getMonth() && 
+                   date.getFullYear() === now.getFullYear();
+    
+    if (isToday) {
+      return `Today at ${format(date, 'h:mm a')}`;
+    }
+    
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const isTomorrow = date.getDate() === tomorrow.getDate() && 
+                       date.getMonth() === tomorrow.getMonth() && 
+                       date.getFullYear() === tomorrow.getFullYear();
+    
+    if (isTomorrow) {
+      return `Tomorrow at ${format(date, 'h:mm a')}`;
+    }
+    
+    return format(date, 'MMM d, yyyy \'at\' h:mm a');
+  };
+
+  const handleDeleteReminder = async () => {
+    try {
+      // Delete the reminder
+      // Example: await AsyncStorage.removeItem(`reminder_${id}`);
+      setReminderDate(null);
+      setShowReminderBadge(false);
+      
+      // Cancel any scheduled notifications
+      // Example: await Notifications.cancelScheduledNotificationAsync(`reminder_${id}`);
+      
+      // Show confirmation
+      Alert.alert('Reminder deleted');
+    } catch (error) {
+      console.error('Failed to delete reminder:', error);
+    }
+  };
+
   const handleBack = useCallback(() => {
     if (hasUnsavedChanges.current) {
       Alert.alert(
@@ -315,6 +379,7 @@ export default function EditListScreen() {
             </Pressable>
           </View>
         </View>
+        
         <View style={styles.nameEditor}>
           <TextInput
             style={styles.nameInput}
@@ -324,6 +389,36 @@ export default function EditListScreen() {
             placeholderTextColor="#666666"
           />
         </View>
+        
+        <Animated.View 
+          style={[
+            styles.titleReminderContainer,
+            !reminderDate && styles.titleReminderContainerDisabled
+          ]}
+          entering={FadeIn.duration(300)}
+        >
+          <MaterialCommunityIcons 
+            name={reminderDate ? "bell-ring" : "bell-off"} 
+            size={16} 
+            color={reminderDate ? "#0B4A3F" : "#666666"} 
+          />
+          <Text style={[
+            styles.titleReminderText,
+            !reminderDate && styles.titleReminderTextDisabled
+          ]}>
+            {reminderDate 
+              ? `Reminder: ${format(reminderDate, 'EEE, MMM d h:mm a')}` 
+              : "No reminder set"}
+          </Text>
+          {reminderDate && (
+            <Pressable 
+              style={styles.titleReminderDeleteButton}
+              onPress={handleDeleteReminder}
+            >
+              <MaterialCommunityIcons name="close" size={14} color="#666666" />
+            </Pressable>
+          )}
+        </Animated.View>
       </View>
 
       <View style={styles.progress}>
