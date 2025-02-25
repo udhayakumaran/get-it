@@ -49,7 +49,7 @@ export default function HomeScreen() {
         <AnimatedPressable
           style={styles.createListCard}
           onPress={handleCreateList}
-          entering={FadeIn.delay(200)}>
+          entering={FadeIn.delay(200).springify()}>
           <View style={styles.createListIcon}>
             <MaterialCommunityIcons name="plus-circle" size={32} color="#0B4A3F" />
           </View>
@@ -62,7 +62,7 @@ export default function HomeScreen() {
         <AnimatedPressable
           style={styles.viewListsCard}
           onPress={handleViewLists}
-          entering={FadeIn.delay(400)}>
+          entering={FadeIn.delay(400).springify()}>
           <View style={styles.viewListsContent}>
             <View>
               <Text style={styles.viewListsTitle}>View My Lists</Text>
